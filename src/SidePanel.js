@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 export default function SidePanelWithToggle() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   return (
     <>
@@ -40,7 +40,7 @@ export default function SidePanelWithToggle() {
           height: "100vh",
           
           width: open ? 400 : 0,
-          backgroundColor: "white", // or 'rgba(255,255,255,0.95)' for slight transparency
+          backgroundColor: "white", 
           color: "black",
           overflow: "hidden",
           transition: "width 0.3s ease",

@@ -295,7 +295,7 @@ export default function MultiColumnTaskEditor() {
   }
 
   function handleCancel() {
-    setConfirmClear(false); // hide confirmation UI on cancel
+    setConfirmClear(false); 
   }
 
 function handleDragStart(event) {

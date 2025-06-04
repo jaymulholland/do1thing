@@ -10,10 +10,9 @@ export default function TrashBin() {
       ref={setNodeRef}
       style={{
         position: 'fixed',
-        bottom: 20, // distance from bottom
-        width: 60, // width of the trash bin
-       // left: '50%', // center horizontally
-       // transform: 'translateX(-50%)', // offset by half its width
+        bottom: 20, 
+        width: 60, 
+       
         height: 40,
        
        
