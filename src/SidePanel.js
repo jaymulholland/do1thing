@@ -78,7 +78,7 @@ export default function SidePanelWithToggle() {
 
                 <p>the 3 task lists are customizable and can be used however you want.</p>
                
-    <p>designed by jay mulholland</p> 
+    <p>designed by eyes8atelier</p> 
     <p>contact: ateliyeux@gmail.com</p>
     <img
       src="/eyes82trans2s.png"
