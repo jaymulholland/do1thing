@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import MultiColumnTaskEditor from './ColumnsText';
 import ColumnTitles from './ColumnTitles';
 import SidePanelWithToggle from './SidePanel';
+import ClickSpark from './ClickSpark';
 
 function App() {
   const [editableTitles, setEditableTitles] = useState([
@@ -45,6 +46,14 @@ function App() {
         }}
       >
         <div>
+<ClickSpark
+  sparkColor='#fff'
+  sparkSize={10}
+  sparkRadius={15}
+  sparkCount={8}
+  duration={400}
+ />
+
       <ColumnTitles
   editableTitles={editableTitles}
   isEditingTitles={isEditingTitles}

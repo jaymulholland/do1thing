@@ -19,14 +19,14 @@ import { CSS } from "@dnd-kit/utilities";
 import ClearAllTasksButton from "./ClearAllTasksButton";
 import TrashBin from "./trash";
 import { FaCheck, FaUndo, FaUpload, FaDownload } from "react-icons/fa";
-
+import ShinyText from "./ShinyText";
 function DroppableColumn({ id, isOver, setNodeRef, children }) {
   return (
     <div
       ref={setNodeRef}
       style={{
         flex: 1,
-        minHeight: 600,
+        minHeight:780,
         height: "95%",
         padding: 10,
         backgroundColor: isOver ? "#d0f0ff" : "#fefefe",
@@ -383,13 +383,14 @@ function handleDragEnd(event) {
 
 
   function handleLoadTasks(loadedColumns) {
+    
     if (loadedColumns.length !== 3) {
       alert("File must contain exactly 3 columns.");
       return;
     }
     setColumns(loadedColumns);
   }
-
+const [inputValues, setInputValues] = useState(columns.map(() => ""));
   return (
     <>
       <DndContext
@@ -421,32 +422,67 @@ function handleDragEnd(event) {
           </div>
         </SortableContext>
 
-        <input
-          type="text"
-          placeholder="Add new task..."
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              handleAddTask(colIndex, e.currentTarget.value);
-            }
-          }}
-          ref={inputRefs.current[colIndex]}
-          style={{
-            marginTop: "auto",
-            padding: "8px 12px",
-            borderRadius: 6,
-            border: "0px solid #ccc",
-            outline: "none",
-            fontSize: 14,
-            fontWeight: "bold",
-          }}
-        />
+       
+
+<div style={{ position: "relative", width: "100%" }}>
+  {(inputValues[colIndex] || "") === "" && (
+    <div
+      style={{
+        position: "absolute",
+        top: 8,
+        left: 12,
+        pointerEvents: "none",
+        fontSize: 14,
+        fontWeight: "bold",
+        
+      }}
+    >
+      <div className="shiny-text-wrapper">
+        Add new task...
+        <div className="shiny-text-highlight">Add new task...</div>
+      </div>
+    </div>
+  )}
+  <input
+    type="text"
+    value={inputValues[colIndex] || ""}
+    onChange={(e) => {
+      const newVals = [...inputValues];
+      newVals[colIndex] = e.target.value;
+      setInputValues(newVals);
+    }}
+    onKeyDown={(e) => {
+      if (e.key === "Enter") {
+        handleAddTask(colIndex, e.currentTarget.value);
+        const newVals = [...inputValues];
+        newVals[colIndex] = "";
+        setInputValues(newVals);
+      }
+    }}
+    ref={inputRefs.current[colIndex]}
+    style={{
+      width: "100%",
+      marginTop: "auto",
+      padding: "8px 12px",
+      borderRadius: 6,
+      border: "0px solid #ccc",
+      outline: "none",
+      fontSize: 14,
+      fontWeight: "bold",
+      backgroundColor: "transparent",
+      color: "black",
+    }}
+  />
+</div>
+
       </ColumnWrapper>
     ))}
+     <TrashBin /> 
   </div>
 <DragOverlay>
     {activeId ? <SortableTask id={activeId} text={activeId} /> : null}
   </DragOverlay>
-  <TrashBin />
+  
 </DndContext>
 
 
@@ -467,6 +503,7 @@ function handleDragEnd(event) {
         />
         <SaveTasksButton columns={columns} />
         <LoadTasksButton onLoad={handleLoadTasks} />
+        
       </div>
     </>
   );

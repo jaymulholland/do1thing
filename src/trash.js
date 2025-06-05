@@ -9,13 +9,11 @@ export default function TrashBin() {
     <div
       ref={setNodeRef}
       style={{
-        position: 'fixed',
-        bottom: 20, 
-        width: 60, 
-       
-        height: 40,
-       
-       
+        
+          padding: "6px 14px",
+          borderRadius: 6,
+          border: "0px solid #000",
+          backgroundColor: "transparent",
         fontSize: isOver ? 15: 20,
       color: "rgba(0, 0, 0, 0.75)",
         userSelect: 'none',

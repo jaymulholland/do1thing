@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-
+import MetaBalls from "./Metaball";
 export default function SidePanelWithToggle() {
   const [open, setOpen] = useState(false);
 
@@ -85,6 +85,21 @@ export default function SidePanelWithToggle() {
       
       style={{ width: "160px", height: "auto" }}
     />
+
+    
+
+<MetaBalls
+  color="#ffffff"
+  cursorBallColor="#ffffff"
+  cursorBallSize={2}
+  ballCount={15}
+  animationSize={30}
+  enableMouseInteraction={true}
+  enableTransparency={true}
+  hoverSmoothness={0.05}
+  clumpFactor={1}
+  speed={0.3}
+/>
           </div>
           
         )}

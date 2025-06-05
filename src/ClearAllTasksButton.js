@@ -4,9 +4,9 @@ export default function ClearAllTasksButton({ onConfirm, onCancel, confirm }) {
       style={{
         position: "absolute",
         bottom: 0,
-        right: 20,
+        right: 0,
         userSelect: "none",
-        padding: 12,
+        padding: 0,
         borderRadius: 8,
         zIndex: 9999,
       }}
