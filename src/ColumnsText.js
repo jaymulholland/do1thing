@@ -93,7 +93,7 @@ function SortableTask({ id, text: initialText }) {
   const containerStyle = {
     padding: "8px 12px",
     marginBottom: 8,
-    borderLeft: "4px solid #82cfff",
+    borderRight: "4px rgba(0, 0, 0, 0.1) solid",
     backgroundColor: "#fcfcfc",
     boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
     borderRadius: 6,
@@ -116,9 +116,7 @@ function SortableTask({ id, text: initialText }) {
 
   return (
     <div ref={setNodeRef} style={containerStyle}>
-      <div {...attributes} {...listeners} style={{ cursor: "grab" }}>
-        ⠿
-      </div>
+      
 
       {isEditing ? (
         <input
@@ -154,6 +152,9 @@ function SortableTask({ id, text: initialText }) {
       >
         {completed ? <FaUndo /> : <FaCheck />}
       </button>
+      <div {...attributes} {...listeners} style={{ cursor: "grab", color: "grey"}}>
+        ☰
+      </div>
     </div>
   );
 }

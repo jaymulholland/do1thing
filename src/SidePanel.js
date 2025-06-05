@@ -77,6 +77,7 @@ export default function SidePanelWithToggle() {
                 you can keep on top of the important jobs, and you can keep being productive. </p>
 
                 <p>the 3 task lists are customizable and can be used however you want.</p>
+                <p>app is in alpha stage- please remember to save task lists if they are important</p>
                
     <p>designed by eyes8atelier</p> 
     <p>contact: ateliyeux@gmail.com</p>
@@ -91,13 +92,13 @@ export default function SidePanelWithToggle() {
 <MetaBalls
   color="#ffffff"
   cursorBallColor="#ffffff"
-  cursorBallSize={2}
-  ballCount={15}
-  animationSize={30}
+  cursorBallSize={3}
+  ballCount={13}
+  animationSize={28}
   enableMouseInteraction={true}
   enableTransparency={true}
-  hoverSmoothness={0.05}
-  clumpFactor={1}
+  hoverSmoothness={0.15}
+  clumpFactor={0.8}
   speed={0.3}
 />
           </div>
