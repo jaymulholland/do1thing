@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
+
 import {
   DndContext,
   useDroppable,
@@ -20,18 +21,26 @@ import ClearAllTasksButton from "./ClearAllTasksButton";
 import TrashBin from "./trash";
 import { FaCheck, FaUndo, FaUpload, FaDownload } from "react-icons/fa";
 import ShinyText from "./ShinyText";
+import ClickSpark from "./ClickSpark";
+import { useTheme } from './ThemeContext';
 function DroppableColumn({ id, isOver, setNodeRef, children }) {
+  const { darkMode } = useTheme();
+
   return (
     <div
       ref={setNodeRef}
       style={{
         flex: 1,
-        minHeight:780,
+        minHeight: 780,
         height: "95%",
         padding: 10,
-        backgroundColor: isOver ? "#d0f0ff" : "#fefefe",
+        backgroundColor: isOver
+          ? darkMode ? "#2c3e50" : "#d0f0ff"
+          : darkMode ? "#1a1a1a" : "#fefefe",
         borderRadius: 8,
-        boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+        boxShadow: darkMode
+          ? "0 2px 6px rgba(0,0,0,0.4)"
+          : "0 2px 6px rgba(0,0,0,0.1)",
         display: "flex",
         flexDirection: "column",
         margin: 0,
@@ -43,20 +52,13 @@ function DroppableColumn({ id, isOver, setNodeRef, children }) {
   );
 }
 
+
 function SortableTask({ id, text: initialText }) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-  } = useSortable({ id });
-
+  const { darkMode } = useTheme();
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
   const [completed, setCompleted] = useState(false);
-
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState(initialText);
-
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -66,36 +68,12 @@ function SortableTask({ id, text: initialText }) {
     }
   }, [isEditing]);
 
-  function handleTextClick() {
-    setIsEditing(true);
-  }
-
-  function handleInputChange(e) {
-    setText(e.target.value);
-  }
-
-  function finishEditing() {
-    if (text.trim() === "") {
-      setText(initialText); // revert if empty
-    }
-    setIsEditing(false);
-  }
-
-  function handleKeyDown(e) {
-    if (e.key === "Enter") {
-      finishEditing();
-    } else if (e.key === "Escape") {
-      setText(initialText); // revert on escape
-      setIsEditing(false);
-    }
-  }
-
   const containerStyle = {
     padding: "8px 12px",
     marginBottom: 8,
-    borderRight: "4px rgba(0, 0, 0, 0.1) solid",
-    backgroundColor: "#fcfcfc",
-    boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
+    borderRight: darkMode ? "4px rgba(255,255,255,0.2) solid" : "4px rgba(0, 0, 0, 0.1) solid",
+    backgroundColor: darkMode ? "#333" : "#fcfcfc",
+    boxShadow: darkMode ? "0 1px 3px rgba(0,0,0,0.4)" : "0 1px 3px rgba(0,0,0,0.15)",
     borderRadius: 6,
     display: "flex",
     alignItems: "center",
@@ -108,7 +86,9 @@ function SortableTask({ id, text: initialText }) {
   };
 
   const textStyle = {
-    color: completed ? "#777" : "#000",
+    color: completed
+      ? darkMode ? "#999" : "#777"
+      : darkMode ? "#f1f1f1" : "#000",
     textDecoration: completed ? "line-through" : "none",
     flex: 1,
     cursor: "text",
@@ -116,59 +96,74 @@ function SortableTask({ id, text: initialText }) {
 
   return (
     <div ref={setNodeRef} style={containerStyle}>
-      
-
       {isEditing ? (
         <input
           ref={inputRef}
           value={text}
-          onChange={handleInputChange}
-          onBlur={finishEditing}
-          onKeyDown={handleKeyDown}
+          onChange={e => setText(e.target.value)}
+          onBlur={() => setIsEditing(false)}
+          onKeyDown={e => {
+            if (e.key === "Enter") setIsEditing(false);
+            if (e.key === "Escape") {
+              setText(initialText);
+              setIsEditing(false);
+            }
+          }}
           style={{
             flex: 1,
             fontSize: "0.875rem",
             padding: "2px 6px",
             borderRadius: 4,
-            border: "0px solid #ccc",
+            border: "1px solid",
+            borderColor: darkMode ? "#555" : "#ccc",
+            backgroundColor: darkMode ? "#222" : "#fff",
+            color: darkMode ? "#fefefe" : "#000",
           }}
         />
       ) : (
-        <span style={textStyle} onClick={handleTextClick}>
+        <span style={textStyle} onClick={() => setIsEditing(true)}>
           {text}
         </span>
       )}
-
       <button
-        onClick={() => setCompleted((c) => !c)}
+        onClick={() => setCompleted(c => !c)}
         style={{
-          backgroundColor: completed ? "#e0e0e0" : "#fff",
-          border: "0px solid #999",
+          backgroundColor: completed
+            ? darkMode ? "#555" : "#e0e0e0"
+            : darkMode ? "#333" : "#fff",
+          border: "0px solid",
           borderRadius: 4,
           padding: "2px 6px",
           cursor: "pointer",
+          color: darkMode ? "#ddd" : "#000",
         }}
         aria-label={completed ? "Undo complete" : "Mark complete"}
       >
         {completed ? <FaUndo /> : <FaCheck />}
       </button>
-      <div {...attributes} {...listeners} style={{ cursor: "grab", color: "grey"}}>
+      <div {...attributes} {...listeners} style={{ cursor: "grab", color: darkMode ? "#aaa" : "grey" }}>
         ☰
       </div>
     </div>
   );
 }
 
+
 function ColumnWrapper({ id, children }) {
   const { isOver, setNodeRef } = useDroppable({ id });
   return (
+    
+
     <DroppableColumn id={id} isOver={isOver} setNodeRef={setNodeRef}>
       {children}
+      
     </DroppableColumn>
+    
   );
 }
 
 function SaveTasksButton({ columns }) {
+  const { darkMode } = useTheme();
   function handleSave() {
     const dataStr = JSON.stringify(columns, null, 2);
     const blob = new Blob([dataStr], { type: "application/json" });
@@ -186,9 +181,9 @@ function SaveTasksButton({ columns }) {
       style={{
         padding: "6px 14px",
         borderRadius: 6,
-        border: "0px solid #000",
-        backgroundColor: "white",
-        color: "rgba(0, 0, 0, 0.7)",
+        border: "0px solid",
+        backgroundColor: darkMode ? "#222" : "white",
+        color: darkMode ? "#eee" : "rgba(0, 0, 0, 0.7)",
         fontWeight: "bold",
         cursor: "pointer",
         marginRight: 8,
@@ -200,10 +195,9 @@ function SaveTasksButton({ columns }) {
   );
 }
 
-
-
 function LoadTasksButton({ onLoad }) {
   const fileInputRef = useRef(null);
+  const { darkMode } = useTheme();
 
   function onFileChange(e) {
     const file = e.target.files?.[0];
@@ -212,10 +206,7 @@ function LoadTasksButton({ onLoad }) {
     reader.onload = (ev) => {
       try {
         const loadedColumns = JSON.parse(ev.target.result);
-        if (
-          Array.isArray(loadedColumns) &&
-          loadedColumns.every((col) => Array.isArray(col))
-        ) {
+        if (Array.isArray(loadedColumns) && loadedColumns.every((col) => Array.isArray(col))) {
           onLoad(loadedColumns);
         } else {
           alert("Invalid file format");
@@ -229,33 +220,41 @@ function LoadTasksButton({ onLoad }) {
   }
 
   return (
-    <>
-      <button
-        onClick={() => fileInputRef.current?.click()}
-        style={{
-          padding: "6px 14px",
-          borderRadius: 6,
-          border: "0px solid #000",
-          backgroundColor: "white",
-          color: "rgba(0, 0, 0, 0.7)",
-          fontWeight: "bold",
-          cursor: "pointer",
-          marginRight: 8,
-        }}
-      >
-        <FaUpload style={{ marginRight: 6 }} />
-        Load Tasks
-      </button>
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="application/json"
-        style={{ display: "none" }}
-        onChange={onFileChange}
-      />
-    </>
-  );
+  <div
+   
+  >
+    <button
+      onClick={() => fileInputRef.current?.click()}
+      style={{
+        padding: "6px 14px",
+        borderRadius: 6,
+        border: "0px solid",
+        backgroundColor: darkMode ? "#222" : "white",
+        color: darkMode ? "#eee" : "rgba(0, 0, 0, 0.7)",
+        fontWeight: "bold",
+        cursor: "pointer",
+        marginRight: 8,
+      }}
+    >
+      <FaUpload style={{ marginRight: 6 }} />
+      Load Tasks
+    </button>
+    <input
+      ref={fileInputRef}
+      type="file"
+      accept="application/json"
+      style={{ display: "none" }}
+      onChange={onFileChange}
+    />
+  </div>
+);
+  
 }
+
+
+
+
+
 
 export default function MultiColumnTaskEditor() {
   const [confirmClear, setConfirmClear] = useState(false);
@@ -487,25 +486,36 @@ const [inputValues, setInputValues] = useState(columns.map(() => ""));
 </DndContext>
 
 
+<div
+  style={{
+    position: "fixed",
+    bottom: 56,  // a bit above your dark mode switch (adjust as needed)
+    left: 16,
+    zIndex: 1000,
+    display: "flex",
+    gap: 12,
+    alignItems: "center",
+  }}
+>
+  <ClearAllTasksButton
+    onCancel={handleCancel}
+    confirm={confirmClear}
+    onConfirm={() => {
+      if (confirmClear) {
+        clearAllTasks();
+        setConfirmClear(false);
+      } else {
+        setConfirmClear(true);
+      }
+    }}
+  />
+  <SaveTasksButton columns={columns} />
+  <LoadTasksButton onLoad={handleLoadTasks} />
+</div>
 
-      <div style={{ display: "flex", gap: 12, marginTop: 12 }}>
-        <ClearAllTasksButton
-        onCancel={handleCancel}
-          confirm={confirmClear}
-          onConfirm={() => {
-            if (confirmClear) {
-              clearAllTasks();
-              setConfirmClear(false);
-            } else {
-              setConfirmClear(true);
-            }
-            
-          }}
-        />
-        <SaveTasksButton columns={columns} />
-        <LoadTasksButton onLoad={handleLoadTasks} />
-        
-      </div>
+  
+
+
     </>
   );
 }

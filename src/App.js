@@ -1,11 +1,27 @@
 import './App.css';
 import React, { useState } from "react";
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import Switch from '@mui/material/Switch';
+import DarkModeSwitch from './DarkModeSwitch';
 import MultiColumnTaskEditor from './ColumnsText';
 import ColumnTitles from './ColumnTitles';
 import SidePanelWithToggle from './SidePanel';
 import ClickSpark from './ClickSpark';
+import { ThemeContext } from "./ThemeContext";
 
 function App() {
+  const [darkMode, setDarkMode] = useState(false);
+  const toggleDarkMode = () => setDarkMode(prev => !prev);
+
+  const theme = createTheme({
+    palette: {
+      mode: darkMode ? 'dark' : 'light',
+      primary: { main: '#90caf9' },
+      secondary: { main: '#131052' },
+    },
+  });
+
   const [editableTitles, setEditableTitles] = useState([
     "MAIN LIST",
     "CENTRAL LIST",
@@ -26,45 +42,39 @@ function App() {
   }
 
   return (
-    <div
-      className="App"
-      style={{
-        position: "relative",
-        height: "100vh",  // full viewport height
-       
-        display: "flex",
-      }}
-    >
-      <SidePanelWithToggle />
+    <ThemeContext.Provider value={{ darkMode, toggleDarkMode }}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <div className="App" style={{ position: "relative", height: "100%", display: "flex" }}>
+         
 
-      <main
-        style={{
-          flexGrow: 1,
-          padding: "24px",
-          overflowY: "auto",
-          boxSizing: "border-box",
-        }}
-      >
-        <div>
-<ClickSpark
-  sparkColor='#fff'
-  sparkSize={10}
-  sparkRadius={15}
-  sparkCount={8}
-  duration={400}
- />
+          <SidePanelWithToggle />
 
-      <ColumnTitles
-  editableTitles={editableTitles}
-  isEditingTitles={isEditingTitles}
-  onTitleChange={handleTitleChange}
-  toggleEditingTitles={toggleEditingTitles}
-/>
-      </div>
+          <main style={{ flexGrow: 1, padding: "24px", overflowY: "auto", boxSizing: "border-box" }}>
+            <ColumnTitles
+              editableTitles={editableTitles}
+              isEditingTitles={isEditingTitles}
+              onTitleChange={handleTitleChange}
+              toggleEditingTitles={toggleEditingTitles}
+            />
+            <MultiColumnTaskEditor />
+             <div
+  style={{
+    position: 'fixed',
+    bottom: 16,
+    left: 16,
+    display: 'flex',
+    alignItems: 'center',
+    zIndex: 1000, // optional, to stay above other elements
+  }}
+>
+  <DarkModeSwitch darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
-        <MultiColumnTaskEditor />
-      </main>
-    </div>
+</div>
+          </main>
+        </div>
+      </ThemeProvider>
+    </ThemeContext.Provider>
   );
 }
 

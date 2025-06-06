@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import MetaBalls from "./Metaball";
+import { useTheme } from "./ThemeContext";
 export default function SidePanelWithToggle() {
   const [open, setOpen] = useState(false);
-
+ const { darkMode } = useTheme();
   return (
     <>
       <button
@@ -14,10 +15,10 @@ export default function SidePanelWithToggle() {
           left: open ? 350 : 0,  // places button right at panel edge or left edge
           width: 40,
           height: 30,
-          backgroundColor: "white",
+          backgroundColor: darkMode ? "rgba(0, 0, 0, 0.6)": "rgba(255,255,255, 0.8)" ,
           border: "none",
           borderRadius: "8px 8px 8px 8px",
-          color: "black",
+          color: darkMode ?  "rgba(255,255,255, 0.8)" : "rgba(0, 0, 0, 0.6)",
           cursor: "pointer",
           display: "flex",
           alignItems: "center",
@@ -40,8 +41,8 @@ export default function SidePanelWithToggle() {
           height: "100vh",
           
           width: open ? 400 : 0,
-          backgroundColor: "white", 
-          color: "black",
+          backgroundColor: darkMode ? "rgb(20, 20, 20)" : "rgba(255,255,255, 1)",
+          color: darkMode ? "rgba(255,255,255, 1)" : "rgb(20, 20, 20)",
           overflow: "hidden",
           transition: "width 0.3s ease",
           zIndex: 1100,
@@ -86,7 +87,8 @@ export default function SidePanelWithToggle() {
       
       style={{ width: "160px", height: "auto" }}
     />
-
+<p>version: 0.1a</p> 
+<p>does not work on mobile (yet)! editing tasks is buggy and tasks can reset</p>
     
 
 <MetaBalls
