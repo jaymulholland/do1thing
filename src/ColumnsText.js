@@ -73,18 +73,28 @@ function SortableTask({ id, text: initialText }) {
   const containerStyle = {
     padding: "8px 12px",
     marginBottom: 8,
-    borderRight: darkMode ? "4px rgba(255,255,255,0.2) solid" : "4px rgba(0, 0, 0, 0.1) solid",
+    borderRight: darkMode ? "4px solid rgba(255,255,255,0.2)" : "4px solid rgba(0,0,0,0.1)",
     backgroundColor: darkMode ? "#333" : "#fcfcfc",
     boxShadow: darkMode ? "0 1px 3px rgba(0,0,0,0.4)" : "0 1px 3px rgba(0,0,0,0.15)",
     borderRadius: 6,
     display: "flex",
     alignItems: "center",
     fontSize: "0.875rem",
-    textAlign: "left",
-    gap: "8px",
+    gap: 8,
     userSelect: "none",
     transform: CSS.Transform.toString(transform),
     transition,
+  };
+
+  const inputStyle = {
+    flex: 1,
+    fontSize: "0.875rem",
+    padding: "2px 6px",
+    borderRadius: 4,
+    border: "1px solid",
+    borderColor: darkMode ? "#555" : "#ccc",
+    backgroundColor: darkMode ? "#222" : "#fff",
+    color: darkMode ? "#fefefe" : "#000",
   };
 
   const textStyle = {
@@ -94,6 +104,22 @@ function SortableTask({ id, text: initialText }) {
     textDecoration: completed ? "line-through" : "none",
     flex: 1,
     cursor: "text",
+  };
+
+  const buttonStyle = {
+    backgroundColor: completed
+      ? darkMode ? "#555" : "#e0e0e0"
+      : darkMode ? "#333" : "#fff",
+    border: "none",
+    borderRadius: 4,
+    padding: "2px 6px",
+    cursor: "pointer",
+    color: darkMode ? "#ddd" : "#000",
+  };
+
+  const dragHandleStyle = {
+    cursor: "grab",
+    color: darkMode ? "#aaa" : "grey",
   };
 
   return (
@@ -111,16 +137,7 @@ function SortableTask({ id, text: initialText }) {
               setIsEditing(false);
             }
           }}
-          style={{
-            flex: 1,
-            fontSize: "0.875rem",
-            padding: "2px 6px",
-            borderRadius: 4,
-            border: "1px solid",
-            borderColor: darkMode ? "#555" : "#ccc",
-            backgroundColor: darkMode ? "#222" : "#fff",
-            color: darkMode ? "#fefefe" : "#000",
-          }}
+          style={inputStyle}
         />
       ) : (
         <span style={textStyle} onClick={() => setIsEditing(true)}>
@@ -129,26 +146,18 @@ function SortableTask({ id, text: initialText }) {
       )}
       <button
         onClick={() => setCompleted(c => !c)}
-        style={{
-          backgroundColor: completed
-            ? darkMode ? "#555" : "#e0e0e0"
-            : darkMode ? "#333" : "#fff",
-          border: "0px solid",
-          borderRadius: 4,
-          padding: "2px 6px",
-          cursor: "pointer",
-          color: darkMode ? "#ddd" : "#000",
-        }}
+        style={buttonStyle}
         aria-label={completed ? "Undo complete" : "Mark complete"}
       >
         {completed ? <FaUndo /> : <FaCheck />}
       </button>
-      <div {...attributes} {...listeners} style={{ cursor: "grab", color: darkMode ? "#aaa" : "grey" }}>
+      <div {...attributes} {...listeners} style={dragHandleStyle}>
         ☰
       </div>
     </div>
   );
 }
+
 
 
 function ColumnWrapper({ id, children }) {
@@ -280,7 +289,7 @@ export default function MultiColumnTaskEditor() {
  const sensors = useSensors(
   useSensor(PointerSensor, {
     activationConstraint: {
-      delay: 250,
+      delay: 50,
       tolerance: 5,
     },
   }),
