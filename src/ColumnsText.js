@@ -6,6 +6,7 @@ import {
   useDroppable,
   closestCenter,
   PointerSensor,
+  TouchSensor ,
   useSensor,
   useSensors,
   DragOverlay
@@ -31,7 +32,9 @@ function DroppableColumn({ id, isOver, setNodeRef, children }) {
       ref={setNodeRef}
       style={{
         flex: 1,
-        minHeight: 780,
+        minHeight: 600,
+        height: '100vh',
+        overflow: "hidden",
         height: "95%",
         padding: 10,
         backgroundColor: isOver
@@ -275,7 +278,12 @@ export default function MultiColumnTaskEditor() {
     }
   }, [columns.length]);
 
-  const sensors = useSensors(useSensor(PointerSensor));
+  const sensors = useSensors(useSensor(PointerSensor), useSensor(TouchSensor, {
+  activationConstraint: {
+    delay: 150,
+    tolerance: 5,
+  },
+}));
 
   function clearAllTasks() {
     setColumns([[], [], []]);
@@ -470,7 +478,7 @@ const [inputValues, setInputValues] = useState(columns.map(() => ""));
       fontSize: 14,
       fontWeight: "bold",
       backgroundColor: "transparent",
-      color: "black",
+      color:" rgba(182, 182, 182)",
     }}
   />
 </div>
