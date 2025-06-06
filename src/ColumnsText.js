@@ -37,9 +37,8 @@ function DroppableColumn({ id, isOver, setNodeRef, children }) {
         overflow: "hidden",
         height: "95%",
         padding: 10,
-        backgroundColor: isOver
-          ? darkMode ? "#2c3e50" : "#d0f0ff"
-          : darkMode ? "#1a1a1a" : "#fefefe",
+        backgroundColor: 
+            darkMode ? "#1a1a1a" : "#fff",
         borderRadius: 8,
         boxShadow: darkMode
           ? "0 2px 6px rgba(0,0,0,0.4)"
@@ -278,12 +277,20 @@ export default function MultiColumnTaskEditor() {
     }
   }, [columns.length]);
 
-  const sensors = useSensors(useSensor(PointerSensor), useSensor(TouchSensor, {
-  activationConstraint: {
-    delay: 150,
-    tolerance: 5,
-  },
-}));
+ const sensors = useSensors(
+  useSensor(PointerSensor, {
+    activationConstraint: {
+      delay: 250,
+      tolerance: 5,
+    },
+  }),
+  useSensor(TouchSensor, {
+    activationConstraint: {
+      delay: 250,
+      tolerance: 5,
+    },
+  })
+);
 
   function clearAllTasks() {
     setColumns([[], [], []]);
